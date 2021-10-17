@@ -10,16 +10,14 @@ import kotlinx.coroutines.*
 class MoviesListViewModel : ViewModel() {
      val movieService = MovieService().getMovieService()
      var job: Job? = null
-     val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+    var job2: Job? = null
+    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         onError("Exception handled: ${throwable.localizedMessage}")
     }
     val movies = MutableLiveData<List<Item>>()
+    val mostPopular=MutableLiveData<List<Item>>()
     val loadError = MutableLiveData<String?>()
     val loading = MutableLiveData<Boolean>()
-
-   // var movies= MutableLiveData<List<Item>>
-     // var loadError :String
-    // var loading = MutableLiveData<Boolean>()
 
     fun refresh() {
         fetchMovies()
@@ -42,6 +40,20 @@ class MoviesListViewModel : ViewModel() {
                 }
             }
         }
+         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+             val response = movieService.getMostPopularTVs()
+
+             withContext(Dispatchers.Main) {
+                 if (response.isSuccessful) {
+                     mostPopular.value = response.body()?.items!!
+                     loadError.value= response.body()!!.errorMessage.toString()
+                     loading.value = false
+
+                 } else {
+                     onError("Error : ${response.message()} ")
+                 }
+             }
+         }
        loadError.value = ""
         loading.value = false
     }
@@ -54,6 +66,8 @@ class MoviesListViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         job?.cancel()
+        job2?.cancel()
+
     }
 
 }

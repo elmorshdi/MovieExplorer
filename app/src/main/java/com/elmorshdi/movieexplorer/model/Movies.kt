@@ -7,9 +7,13 @@ import kotlinx.android.parcel.Parcelize
 
  data class Movies(
     var errorMessage: String?,
-    var items: List<Item>?
-)
+    var items: List<Item>?)
+
+
 data class Item(
+    var crew: String?,
+    var rank: String?,
+    var rankUpDown: String?,
     var contentRating: String?,
     var directorList: List<Director>?,
     var directors: String?,
@@ -31,6 +35,9 @@ data class Item(
     var year: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readString(),
         TODO("directorList"),
         parcel.readString(),
@@ -54,6 +61,9 @@ data class Item(
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(crew)
+        parcel.writeString(rank)
+        parcel.writeString(rankUpDown)
         parcel.writeString(contentRating)
         parcel.writeString(directors)
         parcel.writeString(fullTitle)

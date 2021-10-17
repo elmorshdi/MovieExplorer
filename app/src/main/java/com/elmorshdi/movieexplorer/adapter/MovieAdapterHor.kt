@@ -40,7 +40,7 @@ class MovieAdapterHor(
             binding.executePendingBindings()
 
             binding.root.setOnClickListener {
-                interaction.onItemSelected(movie)
+                interaction.onItemSelected(movie,ListOrientation.HORIZONTAL)
             }
         }
     }
@@ -60,7 +60,7 @@ class MovieAdapterHor(
             binding.executePendingBindings()
 
             binding.root.setOnClickListener {
-                interaction.onItemSelected(movie)
+                interaction.onItemSelected(movie,ListOrientation.VERTICAL)
             }
         }
     }
@@ -107,6 +107,6 @@ class MovieAdapterHor(
 
     //We use interface to notify the activity with every selection like onItemSelected , onBookmarkSelected
     interface Interaction {
-        fun onItemSelected(movie: Item)
+        fun onItemSelected(movie: Item,type:ListOrientation)
     }
 }

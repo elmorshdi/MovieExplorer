@@ -40,6 +40,20 @@ class MoviesListFragment : Fragment(), MovieAdapterHor.Interaction {
     }
 
     fun observeViewModel() {
+        viewModel.mostPopular.observe(viewLifecycleOwner, Observer { countries ->
+            countries?.let {
+
+
+                binding.rvV.adapter =
+                    MovieAdapterHor(
+                        this.requireContext(),
+                        it,
+                        MovieAdapterHor.ListOrientation.VERTICAL,
+                        this
+                    )
+            }
+        })
+
         viewModel.movies.observe(viewLifecycleOwner, Observer { countries ->
             countries?.let {
 
@@ -51,22 +65,16 @@ class MoviesListFragment : Fragment(), MovieAdapterHor.Interaction {
                         MovieAdapterHor.ListOrientation.HORIZONTAL,
                         this
                     )
-                binding.rvV.adapter =
-                    MovieAdapterHor(
-                        this.requireContext(),
-                        it,
-                        MovieAdapterHor.ListOrientation.VERTICAL,
-                        this
-                    )
             }
         })
 
 
     }
 
-    override fun onItemSelected(movie: Item) {
+    override fun onItemSelected(movie: Item,type: MovieAdapterHor.ListOrientation) {
         val bundle = bundleOf(
             "ITEM" to movie,
+            "TYPE" to type
         )
         navController.navigate(R.id.action_moviesListFragment_to_movieDetailsFragment, bundle)
     }

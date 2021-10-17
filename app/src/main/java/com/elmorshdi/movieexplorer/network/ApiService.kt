@@ -11,6 +11,7 @@ import retrofit2.http.GET
 interface ApiService {
     @GET("ComingSoon/k_ck0qo9qt")
     suspend fun getMovies(): Response<Movies>
-
+    @GET("MostPopularTVs/k_ck0qo9qt")
+    suspend fun getMostPopularTVs(): Response<Movies>
 }
 
